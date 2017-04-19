@@ -1,0 +1,25 @@
+memo = "03e2b8a6eb0dc79dd484f6c564e17470b9125b687835d77db426ebe83d5e62fa"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/Sirupsen/logrus"
+  packages = ["."]
+  revision = "10f801ebc38b33738c9d17d50860f484a0988ff5"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/containous/flaeg"
+  packages = ["."]
+  revision = "b5d2dc5878df07c2d74413348186982e7b865871"
+
+[[projects]]
+  name = "github.com/ogier/pflag"
+  packages = ["."]
+  revision = "32a05c62658bd1d7c7e75cbc8195de5d585fde0f"
+  version = "v0.0.1"
+
+[[projects]]
+  branch = "master"
+  name = "golang.org/x/sys"
+  packages = ["unix"]
+  revision = "f3918c30c5c2cb527c0b071a27c35120a6c0719a"
