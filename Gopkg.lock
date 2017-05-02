@@ -1,22 +1,58 @@
-memo = "03e2b8a6eb0dc79dd484f6c564e17470b9125b687835d77db426ebe83d5e62fa"
+memo = "9e4312ed263cb3773e487e0ad7d44ef7fa77bc1306fa07e305ab0bdeef64f3e0"
 
 [[projects]]
   branch = "master"
-  name = "github.com/Sirupsen/logrus"
+  name = "github.com/armon/go-radix"
   packages = ["."]
-  revision = "10f801ebc38b33738c9d17d50860f484a0988ff5"
+  revision = "4239b77079c7b5d1243b7b4736304ce8ddb6f0f2"
 
 [[projects]]
   branch = "master"
-  name = "github.com/containous/flaeg"
+  name = "github.com/bgentry/speakeasy"
   packages = ["."]
-  revision = "b5d2dc5878df07c2d74413348186982e7b865871"
+  revision = "4aabc24848ce5fd31929f7d1e4ea74d3709c14cd"
 
 [[projects]]
-  name = "github.com/ogier/pflag"
+  name = "github.com/hashicorp/consul"
+  packages = ["api"]
+  revision = "e9ca44d0a1757ac9aecc6785904a701936c10e4a"
+  version = "v0.8.1"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/hashicorp/go-cleanhttp"
   packages = ["."]
-  revision = "32a05c62658bd1d7c7e75cbc8195de5d585fde0f"
-  version = "v0.0.1"
+  revision = "3573b8b52aa7b37b9358d966a898feb387f62437"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/hashicorp/go-rootcerts"
+  packages = ["."]
+  revision = "6bb64b370b90e7ef1fa532be9e591a81c3493e00"
+
+[[projects]]
+  name = "github.com/hashicorp/serf"
+  packages = ["coordinate"]
+  revision = "d6574a5bb1226678d7010325fb6c985db20ee458"
+  version = "v0.8.1"
+
+[[projects]]
+  name = "github.com/mattn/go-isatty"
+  packages = ["."]
+  revision = "fc9e8d8ef48496124e79ae0df75490096eccf6fe"
+  version = "v0.0.2"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/mitchellh/cli"
+  packages = ["."]
+  revision = "ee8578a9c12a5bb9d55303b9665cc448772c81b8"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/mitchellh/go-homedir"
+  packages = ["."]
+  revision = "b8bc1bf767474819792c23f32d8286a45736f1c6"
 
 [[projects]]
   branch = "master"

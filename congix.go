@@ -1,39 +1,49 @@
 package main
 
 import (
-	log "github.com/Sirupsen/logrus"
-	"github.com/containous/flaeg"
+	//"flag"
+	"fmt"
 	"os"
+
+	"github.com/mitchellh/cli"
+	"github.com/xytis/congix/agent"
+	"github.com/xytis/congix/structs/config"
 )
 
-type CongixConfiguration struct {
-	Name string
-}
-
-func NewCongixConfiguration() *CongixConfiguration {
-	return &CongixConfiguration{}
-}
-
-func NewPointersCongixConfiguration() *CongixConfiguration {
-	return &CongixConfiguration{}
-}
+var (
+	VERSION = "0.0.1"
+)
 
 func main() {
-	congixConfiguration := NewCongixConfiguration()
-	pointersCongixConfiguration := NewPointersCongixConfiguration()
-	congixCmd := &flaeg.Command{
-		Name:                  "congix",
-		Description:           `nginx-plus adapter to consul`,
-		Config:                congixConfiguration,
-		DefaultPointersConfig: pointersCongixConfiguration,
-		Run: func() error {
-			log.Error("Hello world")
-			return nil
+	os.Exit(Run(os.Args[1:]))
+}
+
+func Run(args []string) int {
+	c := cli.NewCLI("congix", VERSION)
+	ui := &cli.BasicUi{
+		Reader:      os.Stdin,
+		Writer:      os.Stdout,
+		ErrorWriter: os.Stderr,
+	}
+	config := config.DefaultConsulConfig()
+	fmt.Printf("default config: %v\n", config)
+	c.Commands = map[string]cli.CommandFactory{
+		"agent": func() (cli.Command, error) {
+			return &agent.Command{
+				Ui: ui,
+			}, nil
+		},
+		"check": func() (cli.Command, error) {
+			return &agent.Command{}, nil
 		},
 	}
+	c.Args = args
 
-	flaeg := flaeg.New(congixCmd, os.Args[1:])
-	if err := flaeg.Run(); err != nil {
-		log.Fatalf("Error %s", err.Error())
+	exitCode, err := c.Run()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error executing CLI: %s\n", err.Error())
+		return 1
 	}
+
+	return exitCode
 }
