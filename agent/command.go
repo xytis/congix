@@ -3,10 +3,13 @@ package agent
 import (
 	"flag"
 	"fmt"
+	"os"
+	"os/signal"
 	"strings"
+	"syscall"
 
+	consulApi "github.com/hashicorp/consul/api"
 	"github.com/mitchellh/cli"
-	"github.com/xytis/congix/structs/config"
 )
 
 type Command struct {
@@ -14,23 +17,19 @@ type Command struct {
 }
 
 func (c *Command) Run(args []string) int {
-
-	// Make a new, empty config.
-	config := &Config{
-		Nginx:  &config.NginxConfig{},
-		Consul: &config.ConsulConfig{},
+	config := c.readConfig()
+	if config == nil {
+		return 1
 	}
-	fmt.Printf("config: %v\n", config)
 
-	flags := flag.NewFlagSet("agent", flag.ContinueOnError)
-	flags.Usage = func() { c.Ui.Error(c.Help()) }
+	//Create consul connection
+	client, err := consulApi.NewClient(consulApi.DefaultConfig())
+	if err != nil {
+		c.Ui.Error(fmt.Sprintf("error while connecting to consul: %v\n", err))
+		return 1
+	}
 
-	fmt.Println("parsing file")
-	_, err := ParseFile("./example/config.hcl")
-	fmt.Errorf("error on parse: %v\n", err)
-
-	fmt.Println("asking for help")
-	return cli.RunResultHelp
+	return c.handleSignals(config)
 }
 
 func (c *Command) Synopsis() string {
@@ -46,4 +45,48 @@ Usage: congix agent [options]
 `
 
 	return strings.TrimSpace(helpText)
+}
+
+func (c *Command) readConfig() *Config {
+	flags := flag.NewFlagSet("agent", flag.ContinueOnError)
+	flags.Usage = func() { c.Ui.Error(c.Help()) }
+
+	config, err := LoadConfig("./example/config.hcl")
+	if err != nil {
+		c.Ui.Error(fmt.Sprintf("error on parse: %v\n", err))
+		return nil
+	}
+	return config
+}
+
+// handleSignals blocks until we get an exit-causing signal
+func (c *Command) handleSignals(config *Config) int {
+	signalCh := make(chan os.Signal, 4)
+	signal.Notify(signalCh, os.Interrupt, syscall.SIGTERM, syscall.SIGHUP, syscall.SIGPIPE)
+
+	// Wait for a signal
+WAIT:
+	var sig os.Signal
+	select {
+	case s := <-signalCh:
+		sig = s
+	}
+	c.Ui.Output(fmt.Sprintf("Caught signal: %v", sig))
+
+	// Skip any SIGPIPE signal (See issue #1798)
+	if sig == syscall.SIGPIPE {
+		goto WAIT
+	}
+
+	// Check if this is a SIGHUP
+	/*
+		if sig == syscall.SIGHUP {
+			if conf := c.handleReload(config); conf != nil {
+				*config = *conf
+			}
+			goto WAIT
+		}
+	*/
+
+	return 0
 }

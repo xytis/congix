@@ -16,4 +16,4 @@ run:
 		-tags release \
 		-ldflags '-X $(PACKAGE)/main.Version=$(VERSION) -X $(PACKAGE)/main.BuildDate=$(DATE)' \
 		-o bin/$(PACKAGE)
-	bin/$(PACKAGE) agent
+	CONSUL_HTTP_ADDR=consul-ui.hosts.lamoda.ru:8500 bin/$(PACKAGE) agent

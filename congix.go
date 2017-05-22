@@ -7,7 +7,6 @@ import (
 
 	"github.com/mitchellh/cli"
 	"github.com/xytis/congix/agent"
-	"github.com/xytis/congix/structs/config"
 )
 
 var (
@@ -25,8 +24,6 @@ func Run(args []string) int {
 		Writer:      os.Stdout,
 		ErrorWriter: os.Stderr,
 	}
-	config := config.DefaultConsulConfig()
-	fmt.Printf("default config: %v\n", config)
 	c.Commands = map[string]cli.CommandFactory{
 		"agent": func() (cli.Command, error) {
 			return &agent.Command{

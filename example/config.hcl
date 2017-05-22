@@ -1,15 +1,11 @@
 nginx {
-  address            = "http://localhost:8080"
-  status_endpoint    = "status"
-  upstreams_endpoint = "upstream_conf"
-}
-
-consul {
-  address = "http://localhost:8500"
+  address           = "http://localhost:8080"
+  status_endpoint   = "status"
+  upstream_endpoint = "upstream_conf"
 }
 
 mapping {
-  sample-static-project {
+  entry "sample-static-project" {
     static = {
       server = "10.144.253.11:7480"
     }
@@ -18,8 +14,10 @@ mapping {
       server = "10.144.253.12:7480"
     }
   }
+}
 
-  sample-consul-project {
+mapping {
+  entry "sample-consul-project" {
     service = "service-name"
   }
 }

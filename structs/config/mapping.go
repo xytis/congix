@@ -5,7 +5,7 @@ type StaticEntry struct {
 }
 
 type Entry struct {
-	Name        *string
+	Name        *string `mapstructure:`
 	ServiceName *string `mapstructure:"service"`
 	Static      []*StaticEntry
 }

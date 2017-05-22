@@ -1,4 +1,4 @@
-memo = "9e4312ed263cb3773e487e0ad7d44ef7fa77bc1306fa07e305ab0bdeef64f3e0"
+memo = "47f518479355fc2b9651c9f544f5f82fa4525ae68daedca74e0100c0da39ff4e"
 
 [[projects]]
   branch = "master"
@@ -20,15 +20,33 @@ memo = "9e4312ed263cb3773e487e0ad7d44ef7fa77bc1306fa07e305ab0bdeef64f3e0"
 
 [[projects]]
   branch = "master"
+  name = "github.com/hashicorp/errwrap"
+  packages = ["."]
+  revision = "7554cd9344cec97297fa6649b055a8c98c2a1e55"
+
+[[projects]]
+  branch = "master"
   name = "github.com/hashicorp/go-cleanhttp"
   packages = ["."]
   revision = "3573b8b52aa7b37b9358d966a898feb387f62437"
 
 [[projects]]
   branch = "master"
+  name = "github.com/hashicorp/go-multierror"
+  packages = ["."]
+  revision = "ed905158d87462226a13fe39ddf685ea65f1c11f"
+
+[[projects]]
+  branch = "master"
   name = "github.com/hashicorp/go-rootcerts"
   packages = ["."]
   revision = "6bb64b370b90e7ef1fa532be9e591a81c3493e00"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/hashicorp/hcl"
+  packages = [".","hcl/ast","hcl/parser","hcl/scanner","hcl/strconv","hcl/token","json/parser","json/scanner","json/token"]
+  revision = "a4b07c25de5ff55ad3b8936cea69a79a3d95a855"
 
 [[projects]]
   name = "github.com/hashicorp/serf"
@@ -58,4 +76,4 @@ memo = "9e4312ed263cb3773e487e0ad7d44ef7fa77bc1306fa07e305ab0bdeef64f3e0"
   branch = "master"
   name = "golang.org/x/sys"
   packages = ["unix"]
-  revision = "f3918c30c5c2cb527c0b071a27c35120a6c0719a"
+  revision = "9ccfe848b9db8435a24c424abbc07a921adf1df5"
