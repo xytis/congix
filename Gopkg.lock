@@ -1,4 +1,4 @@
-memo = "47f518479355fc2b9651c9f544f5f82fa4525ae68daedca74e0100c0da39ff4e"
+memo = "7015306c99233e60503cd7a200b0ba8c0f60a86cd3cda02fe1f7fb4444533818"
 
 [[projects]]
   branch = "master"
@@ -15,8 +15,8 @@ memo = "47f518479355fc2b9651c9f544f5f82fa4525ae68daedca74e0100c0da39ff4e"
 [[projects]]
   name = "github.com/hashicorp/consul"
   packages = ["api"]
-  revision = "e9ca44d0a1757ac9aecc6785904a701936c10e4a"
-  version = "v0.8.1"
+  revision = "ea2a82b221c3e0a466a4f38ab4e8718ad8c60621"
+  version = "v0.8.3"
 
 [[projects]]
   branch = "master"
@@ -46,7 +46,7 @@ memo = "47f518479355fc2b9651c9f544f5f82fa4525ae68daedca74e0100c0da39ff4e"
   branch = "master"
   name = "github.com/hashicorp/hcl"
   packages = [".","hcl/ast","hcl/parser","hcl/scanner","hcl/strconv","hcl/token","json/parser","json/scanner","json/token"]
-  revision = "a4b07c25de5ff55ad3b8936cea69a79a3d95a855"
+  revision = "392dba7d905ed5d04a5794ba89f558b27e2ba1ca"
 
 [[projects]]
   name = "github.com/hashicorp/serf"
@@ -74,6 +74,12 @@ memo = "47f518479355fc2b9651c9f544f5f82fa4525ae68daedca74e0100c0da39ff4e"
 
 [[projects]]
   branch = "master"
+  name = "github.com/mitchellh/mapstructure"
+  packages = ["."]
+  revision = "d0303fe809921458f417bcf828397a65db30a7e4"
+
+[[projects]]
+  branch = "master"
   name = "golang.org/x/sys"
   packages = ["unix"]
-  revision = "9ccfe848b9db8435a24c424abbc07a921adf1df5"
+  revision = "dbc2be9168a660ef302e04b6ff6406de6f967473"

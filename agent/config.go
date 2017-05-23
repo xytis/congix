@@ -15,19 +15,19 @@ import (
 	"github.com/hashicorp/hcl"
 	"github.com/hashicorp/hcl/hcl/ast"
 	"github.com/mitchellh/mapstructure"
-	"github.com/xytis/congix/helper"
+	"github.com/xytis/congix/mapping"
 	"github.com/xytis/congix/structs/config"
 )
 
 type Config struct {
 	// Configuration to reach and control nginx plus server
-	Nginx *config.NginxConfig `mapstructure:"nginx"`
+	Nginx *config.NginxConfig
 
 	// Runtime mapping which control current nginx state
-	Mapping *config.Mapping `mapstructure:"mapping"`
+	Mapping *mapping.Mapping
 
 	// List of config files that have been loaded (in order)
-	Files []string `mapstructure:"-"`
+	Files []string
 }
 
 func Parse(r io.Reader) (*Config, error) {
@@ -60,15 +60,17 @@ func Parse(r io.Reader) (*Config, error) {
 		return nil, err
 	}
 
-	config := Config{
-		Mapping: &config.Mapping{},
-		Nginx:   &config.NginxConfig{},
+	c := Config{
+		Mapping: &mapping.Mapping{
+			Entries: make(map[string]*mapping.Entry),
+		},
+		Nginx: &config.NginxConfig{},
 	}
 
 	{
 		matches := list.Filter("nginx")
 		if len(matches.Items) > 0 {
-			if err := parseNginxStanza(&config.Nginx, matches); err != nil {
+			if err := parseNginxStanza(&c.Nginx, matches); err != nil {
 				return nil, fmt.Errorf("error parsing 'nginx': %s", err)
 			}
 		}
@@ -79,12 +81,13 @@ func Parse(r io.Reader) (*Config, error) {
 		if len(matches.Items) < 1 {
 			return nil, fmt.Errorf("missing 'mapping' stanza")
 		}
-		if err := parseMappingStanza(&config.Mapping, matches); err != nil {
+		if err := parseMappingStanza(&c.Mapping, matches); err != nil {
 			return nil, fmt.Errorf("error parsing 'mapping': %s", err)
 		}
+		fmt.Printf("mapping: %v\n", c.Mapping)
 	}
 
-	return &config, nil
+	return &c, nil
 }
 
 func LoadConfig(path string) (*Config, error) {
@@ -188,7 +191,7 @@ func parseNginxStanza(result **config.NginxConfig, list *ast.ObjectList) error {
 	return nil
 }
 
-func parseMappingStanza(result **config.Mapping, list *ast.ObjectList) error {
+func parseMappingStanza(result **mapping.Mapping, list *ast.ObjectList) error {
 	for _, obj := range list.Items {
 		var listVal *ast.ObjectList
 		if ot, ok := obj.Val.(*ast.ObjectType); ok {
@@ -199,30 +202,21 @@ func parseMappingStanza(result **config.Mapping, list *ast.ObjectList) error {
 
 		if o := listVal.Filter("entry"); len(o.Items) > 0 {
 			for _, item := range o.Items {
-				entry := &config.Entry{}
-				if err := parseMappingEntry(&entry, item); err != nil {
-					return multierror.Prefix(err, "mapping:")
+				name := item.Keys[0].Token.Value().(string)
+				var m map[string]interface{}
+				if err := hcl.DecodeObject(&m, item.Val); err != nil {
+					return err
 				}
-				(*result).Entries = append((*result).Entries, entry)
+
+				if entry, err := mapping.NewEntry(name, m); err != nil {
+					return multierror.Prefix(err, "mapping:")
+				} else {
+					(*result).Entries[name] = &entry
+					fmt.Printf("entry: %v\n", entry)
+				}
 			}
 		}
 	}
-
-	return nil
-}
-
-func parseMappingEntry(result **config.Entry, item *ast.ObjectItem) error {
-	name := item.Keys[0].Token.Value().(string)
-
-	var m map[string]interface{}
-	if err := hcl.DecodeObject(&m, item.Val); err != nil {
-		return err
-	}
-	// Decode the rest
-	if err := mapstructure.WeakDecode(m, result); err != nil {
-		return err
-	}
-	(*result).Name = helper.StringToPtr(name)
 
 	return nil
 }

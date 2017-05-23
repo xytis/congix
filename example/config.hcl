@@ -6,18 +6,25 @@ nginx {
 
 mapping {
   entry "sample-static-project" {
-    static = {
-      server = "10.144.253.11:7480"
-    }
+    type = "static"
 
-    static = {
-      server = "10.144.253.12:7480"
-    }
+    upstreams = [
+      "10.144.253.11:7480",
+      "10.144.253.12:7480",
+    ]
   }
 }
 
 mapping {
   entry "sample-consul-project" {
+    type         = "consul"
+    service      = "service-name"
+    delay_remove = "10s"
+    delay_insert = "2s"
+  }
+
+  entry "sample-consul-project-defaults" {
+    type    = "consul"
     service = "service-name"
   }
 }

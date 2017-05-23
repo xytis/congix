@@ -1,5 +1,10 @@
 package config
 
+import (
+	"net/url"
+	"path"
+)
+
 // NginxConfig contains information to connect to nginx+ API
 type NginxConfig struct {
 	// Addr is the address of nginx+ server to control
@@ -19,6 +24,24 @@ func DefaultNginxConfig() *NginxConfig {
 		Addr:             "http://localhost:8080",
 		StatusEndpoint:   "status",
 		UpstreamEndpoint: "upstream_conf",
+	}
+}
+
+func (c *NginxConfig) StatusURL() (string, error) {
+	if u, err := url.Parse(c.Addr); err != nil {
+		return "", err
+	} else {
+		u.Path = path.Join(u.Path, c.StatusEndpoint)
+		return u.String(), nil
+	}
+}
+
+func (c *NginxConfig) UpstreamURL() (string, error) {
+	if u, err := url.Parse(c.Addr); err != nil {
+		return "", err
+	} else {
+		u.Path = path.Join(u.Path, c.UpstreamEndpoint)
+		return u.String(), nil
 	}
 }
 

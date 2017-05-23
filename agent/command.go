@@ -8,7 +8,6 @@ import (
 	"strings"
 	"syscall"
 
-	consulApi "github.com/hashicorp/consul/api"
 	"github.com/mitchellh/cli"
 )
 
@@ -22,13 +21,8 @@ func (c *Command) Run(args []string) int {
 		return 1
 	}
 
-	//Create consul connection
-	client, err := consulApi.NewClient(consulApi.DefaultConfig())
-	if err != nil {
-		c.Ui.Error(fmt.Sprintf("error while connecting to consul: %v\n", err))
-		return 1
-	}
 
+	go c.
 	return c.handleSignals(config)
 }
 
